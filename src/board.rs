@@ -35,19 +35,25 @@ fn create_board(
 
     let mut lines: Vec<Result<String, Error>> = BufReader::new(layout).lines().collect();
 
+    let mut walls: Vec<Entity> = Vec::new();
+
     for line in lines {
         if let Ok(line) = line {
             for ch in line.chars() {
                 match ch {
                     '#' => {
-                        commands.spawn((
-                            SpriteBundle {
-                                transform: Transform::from_xyz(fx, fy, 0.0),
-                                texture: asset_server.load("wall.png"),
-                                ..default()
-                            },
-                            Wall {},
-                        ));
+                        let wall = commands
+                            .spawn((
+                                SpriteBundle {
+                                    transform: Transform::from_xyz(fx, fy, 0.0),
+                                    texture: asset_server.load("wall.png"),
+                                    ..default()
+                                },
+                                Wall {},
+                            ))
+                            .id();
+
+                        walls.push(wall);
                     }
                     _ => (),
                 }
@@ -58,6 +64,13 @@ fn create_board(
         fy -= TILE_HEIGHT;
         fx = initial_x;
     }
+
+    commands
+        .spawn(())
+        .insert(Transform::default())
+        .insert(GlobalTransform::default())
+        .insert(Name::new("Walls"))
+        .push_children(&walls);
 
     // print!("{}", level_layout.clone());
 }
