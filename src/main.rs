@@ -1,4 +1,5 @@
 use bevy::{prelude::*, window::PrimaryWindow};
+use bevy_inspector_egui::quick::WorldInspectorPlugin;
 
 mod board;
 mod player;
@@ -14,6 +15,8 @@ pub fn spawn_camera(mut commands: Commands, window_query: Query<&Window, With<Pr
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
+        .add_plugins(WorldInspectorPlugin::new())
+        .add_plugins(board::Board)
         .add_systems(Startup, (player::spawn_player, spawn_camera))
         .add_systems(Update, player::move_player)
         .run();

@@ -15,7 +15,7 @@ pub fn spawn_player(
     commands.spawn((
         SpriteBundle {
             transform: Transform::from_xyz(window.width() / 2.0, window.height() / 2.0, 0.0),
-            texture: asset_server.load("player_scaled.png"),
+            texture: asset_server.load("player_64x.png"),
             ..default()
         },
         Player { speed: 5.0 },
